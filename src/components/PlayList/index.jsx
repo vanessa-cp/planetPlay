@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
+import {v4 as uuid} from 'uuid';
 
 const dataBase = [
     {
         id: "1",
-
         title: "titulo",
-        isFavorite: false,
-    },
+        isFavorite: true,
 
+    },
 
     {
         id: "2",
@@ -24,7 +24,7 @@ const dataBase = [
 
 export const PlayList = () => {
     const [data, setData] = useState(dataBase);
-    const [input, setInput]=useState("");
+    const [input, setInput] = useState("");
 
     const deleteById = (idToDelete) => {
         console.log(idToDelete);
@@ -32,26 +32,38 @@ export const PlayList = () => {
         setData(newData);
     };
 
-    const handlerChange = (value) =>{
-        console.log(value);
-        setInput(value);
-        console.log(input);
+    const createItem = () => {
+        
+        const newItem = {
+            title: input,
+            id:uuid(),
+            isFavorite: false,
+        };
 
+        setData([...data, newItem]);
+        setInput("");
+        console.log(newItem);
+    };
+
+    const handlerChange = (value) => {
+        setInput(value);
     };
 
     return (
         <div>
             <section>
-                <input type="text"
-                value={input}  
-                onChange={(e) => handlerChange(e.target.value) }/>
-                <button>ADD</button>
+                <input
+                    type="text"
+                    value={input}
+                    onChange={(e) => handlerChange(e.target.value)}
+                />
+                <button onClick= {createItem}>ADD</button>
             </section>
             {data.map((item) => (
-                <article key={item.id}>
+                <article key={item.id} className={item.isFavorite ? "isFavorite" : "noFavorite"}>
                     {item.title} -<button onClick={() => deleteById(item.id)}>x</button>
                 </article>
             ))}
         </div>
-    )
-}
+    );
+};
